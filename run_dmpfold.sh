@@ -13,11 +13,11 @@
 # License: GPLv3
 
 # Set this to point to the DMPfold directory
-dmpfolddir=~/DMPfold
+dmpfolddir=~/tools/DMPfold
 
 # Set this to point to the CNS setup script
 STOREPATH=$PATH
-source ~/cns_solve_1.3/.cns_solve_env_sh
+source ~/tools/cns/cns_solve_1.3/.cns_solve_env_sh
 export PATH="$STOREPATH:$PATH" # CNS setup can remove some things from the path
 
 bindir=$dmpfolddir/bin

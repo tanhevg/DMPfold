@@ -1,10 +1,11 @@
 #!/bin/csh
 
 # Set this to point to the DMPfold directory
-set dmpfolddir = ~/dmpfold
+set dmpfolddir = ~/tools/DMPfold
 
 # Set this to point to the legacy BLAST bin directory
-set ncbidir = ~/blast/bin
+set ncbidir = /bmm/soft/Linux_2.6_64_redhat6/src/blast-2.2.9-amd64-linux
+set psipreddir = $dmpfolddir/bin
 
 # The name of the BLAST data bank
 set dbname = $2
@@ -45,7 +46,7 @@ endif
 
 echo Pass1 ...
 
-$dmpfolddir/bin/psipred $tmproot.mtx $datadir/weights.dat $datadir/weights.dat2 $datadir/weights.dat3 > $rootname.ss
+$psipreddir/psipred $tmproot.mtx $datadir/weights.dat $datadir/weights.dat2 $datadir/weights.dat3 > $rootname.ss
 
 if ($status != 0) then
     echo "FATAL: Error whilst running psipred - script terminated!"
@@ -54,7 +55,7 @@ endif
 
 echo Pass2 ...
 
-$dmpfolddir/bin/psipass2 $datadir/weights_p2.dat 1 1.0 1.0 $rootname.ss2 $rootname.ss > $rootname.horiz
+$psipreddir/psipass2 $datadir/weights_p2.dat 1 1.0 1.0 $rootname.ss2 $rootname.ss > $rootname.horiz
 
 if ($status != 0) then
     echo "FATAL: Error whilst running psipass2 - script terminated!"
@@ -63,7 +64,7 @@ endif
 
 echo Solvation pass ...
 
-$dmpfolddir/bin/solvpred $tmproot.mtx $solvpreddata/weights_solv.dat > $rootname.solv
+$psipreddir/solvpred $tmproot.mtx $solvpreddata/weights_solv.dat > $rootname.solv
 
 if ($status != 0) then
     echo "FATAL: Error whilst running solvpred - script terminated!"

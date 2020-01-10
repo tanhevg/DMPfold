@@ -12,19 +12,19 @@
 
 
 # Set the number of CPUs to use for HHblits, PSICOV, FreeContact and CCMpred
-set ncpu = 1
+set ncpu = 8
 
 # Set this to point to the DMPfold directory
-set dmpfolddir = ~/DMPfold
+set dmpfolddir = ~/tools/DMPfold
 
 # Set this to point to the CCMpred bin directory
-set ccmpreddir = ~/CCMpred/bin
+set ccmpreddir = ~/tools/CCMpred/bin
 
 # Set this to point to the FreeContact command
-set freecontactcmd = ~/freecontact/bin/freecontact
+set freecontactcmd = ~/tools/freecontact/bin/freecontact
 
 # Set this to point to the legacy BLAST bin directory
-set ncbidir = ~/blast/bin
+set ncbidir = /bmm/soft/Linux_2.6_64_redhat6/src/blast-2.2.9-amd64-linux
 
 set bindir = $dmpfolddir/bin
 
