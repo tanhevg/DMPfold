@@ -1,7 +1,7 @@
 #!/bin/csh
 
 # Set this to point to the DMPfold directory
-set dmpfolddir = ~/tools/DMPfold
+set dmpfolddir = ~/code/DMPfold
 
 # Set this to point to the legacy BLAST bin directory
 set ncbidir = /bmm/soft/Linux_2.6_64_redhat6/src/blast-2.2.9-amd64-linux
@@ -14,11 +14,13 @@ set datadir = $dmpfolddir/data/psipred
 set solvpreddata = $dmpfolddir/data/solvpred
 
 set basename = $1:r
-set rootname = $basename:t
+#set rootname = $1:t
+#set rootname = $basename:t
 
 # Generate a "unique" temporary filename root
 set hostid = `hostid`
-set tmproot = psitmp$$$hostid
+set tmpbase = psitmp$$$hostid
+set tmproot = `dirname $1`/$tmpbase
 
 \cp -f $1 $tmproot.fasta
 
@@ -34,8 +36,8 @@ endif
 
 echo "Predicting secondary structure..."
 
-echo $tmproot.chk > $tmproot.pn
-echo $tmproot.fasta > $tmproot.sn
+echo $tmpbase.chk > $tmproot.pn
+echo $tmpbase.fasta > $tmproot.sn
 
 $ncbidir/makemat -P $tmproot
 
@@ -46,7 +48,7 @@ endif
 
 echo Pass1 ...
 
-$psipreddir/psipred $tmproot.mtx $datadir/weights.dat $datadir/weights.dat2 $datadir/weights.dat3 > $rootname.ss
+$psipreddir/psipred $tmproot.mtx $datadir/weights.dat $datadir/weights.dat2 $datadir/weights.dat3 > $basename.ss
 
 if ($status != 0) then
     echo "FATAL: Error whilst running psipred - script terminated!"
@@ -55,7 +57,7 @@ endif
 
 echo Pass2 ...
 
-$psipreddir/psipass2 $datadir/weights_p2.dat 1 1.0 1.0 $rootname.ss2 $rootname.ss > $rootname.horiz
+$psipreddir/psipass2 $datadir/weights_p2.dat 1 1.0 1.0 $basename.ss2 $basename.ss > $basename.horiz
 
 if ($status != 0) then
     echo "FATAL: Error whilst running psipass2 - script terminated!"
@@ -64,7 +66,7 @@ endif
 
 echo Solvation pass ...
 
-$psipreddir/solvpred $tmproot.mtx $solvpreddata/weights_solv.dat > $rootname.solv
+$psipreddir/solvpred $tmproot.mtx $solvpreddata/weights_solv.dat > $basename.solv
 
 if ($status != 0) then
     echo "FATAL: Error whilst running solvpred - script terminated!"
@@ -76,6 +78,6 @@ endif
 echo Cleaning up ...
 \rm -f $tmproot.* error.log
 
-echo "Final output files:" $rootname.ss2 $rootname.horiz $rootname.solv
+echo "Final output files:" $basename.ss2 $basename.horiz $basename.solv
 echo "Finished."
 

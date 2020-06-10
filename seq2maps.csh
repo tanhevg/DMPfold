@@ -14,7 +14,7 @@
 set ncpu = 8
 
 # Set this to point to the DMPfold directory
-set dmpfolddir = ~/tools/DMPfold
+set dmpfolddir = ~/code/DMPfold
 
 # Set the following to point to the relevant HH-suite locations
 setenv HHLIB ~/tools/hh-suite
@@ -25,7 +25,7 @@ setenv HHDB /data/uniclust/uniclust30_2018_08/uniclust30_2018_08
 set ccmpreddir = ~/tools/CCMpred/bin
 
 # Set this to point to the FreeContact command
-set freecontactcmd = ~/tools/freecontact/bin/freecontact
+set freecontactcmd = freecontact
 
 # Set this to point to the legacy BLAST bin directory
 set ncbidir = /bmm/soft/Linux_2.6_64_redhat6/src/blast-2.2.9-amd64-linux
@@ -33,7 +33,9 @@ set ncbidir = /bmm/soft/Linux_2.6_64_redhat6/src/blast-2.2.9-amd64-linux
 set bindir = $dmpfolddir/bin
 
 set seqfile = $1
-set target = $1:t:r
+set target = `echo $seqfile | sed 's/\..*$//' `
+set outdir = `dirname $seqfile`
+# set target = $1:t:r
 
 limit stacksize unlimited
 
@@ -42,7 +44,7 @@ $HHBIN/hhblits -i $seqfile -d $HHDB -o $target.hhr -oa3m $target.a3m -e 0.01 -n 
 
 cat $seqfile > $target.temp.fasta
 
-$ncbidir/formatdb -i $target.a3m -t $target.a3m
+$ncbidir/formatdb -i $target.a3m -t $target.a3m -l /dev/null
 
 if (! -e $target.temp.solv) then
     echo "Running PSIPRED & SOLVPRED"
