@@ -13,7 +13,7 @@
 # License: GPLv3
 
 # Set this to point to the DMPfold directory
-dmpfolddir=~/tools/DMPfold
+dmpfolddir=~/code/DMPfold
 
 # Set this to point to the CNS setup script
 STOREPATH=$PATH
