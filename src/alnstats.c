@@ -48,6 +48,13 @@ float contmat[20][20] = {
 };
 
 
+/* The matrix is about 100Mb, so allocating it on the stack is likely to violate the maximum stack size limit
+   (`ulimit -s` in bash, `limit stacksize` in csh).
+   We make it global here, so that it is allocated in the data segment, and there is no need to
+   try lifting the maximum stack limit in the shell scripts. */
+float mimat[MAXSEQLEN][MAXSEQLEN];
+
+
 /* Dump a rude message to standard error and exit */
 void
                 fail(char *errstr)
@@ -158,20 +165,21 @@ int             main(int argc, char **argv)
 	for (k=0; k<nseqs; k++)
 	{
 	    a = aln[k][i];
-	    if (a < 21)
-		pa[i][a] += weight[k];
-	    aacomp[a] += weight[k];
+	    if (a < 21) {
+            pa[i][a] += weight[k];
+            aacomp[a] += weight[k];
+	    }
 	}
 	
 	for (a=0; a<21; a++)
 	    pa[i][a] /= 21.0 + wtsum;
     }
 
-    float mimat[MAXSEQLEN][MAXSEQLEN], misum[MAXSEQLEN], mimean=0.0;
+    float misum[MAXSEQLEN], mimean=0.0;
     
     for (i=0; i<seqlen; i++)
 	misum[i] = 0.0;
-	    
+
     for (i=0; i<seqlen; i++)
     {
 	for (j=i+1; j<seqlen; j++)
