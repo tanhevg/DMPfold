@@ -33,9 +33,10 @@ set ncbidir = /bmm/soft/Linux_2.6_64_redhat6/src/blast-2.2.9-amd64-linux
 set bindir = $dmpfolddir/bin
 
 set seqfile = $1
-set target = `echo $seqfile | sed 's/\..*$//' `
+set target = `echo $seqfile | sed -r 's/\.[^.]*$//' `
 set outdir = `dirname $seqfile`
 # set target = $1:t:r
+echo "Target = $target"
 
 echo "Running HHblits"
 $HHBIN/hhblits -i $seqfile -d $HHDB -o $target.hhr -oa3m $target.a3m -e 0.01 -n 3 -cpu $ncpu -diff inf -cov 10 -Z 10000 -B 10000
